@@ -176,7 +176,7 @@ const MyApplications = () => {
             <FileText className="size-16 mb-4 opacity-20" />
             <p className="text-lg font-medium">No applications found</p>
             <Link
-              to="/all-scholarships"
+              to="/scholarships"
               className="btn btn-primary btn-sm mt-4"
             >
               Browse Scholarships
