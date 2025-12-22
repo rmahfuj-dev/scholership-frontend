@@ -24,7 +24,6 @@ import MyApplications from "../pages/DashBoard/Student/MyApplications/MyApplicat
 import ApplyScholarship from "../pages/ScholarshipDetails/ApplyScholarship";
 import EditApplication from "../pages/DashBoard/Student/EditApplication/EditApplication";
 import MyReviews from "../pages/DashBoard/Student/MyReviews/MyReviews";
-import SuccessStories from "../pages/SuccessStories/SuccessStories";
 import WishList from "../pages/WishList/WishList";
 import ErrorPage from "../pages/ErrorPage/ErrorPage";
 
@@ -40,10 +39,6 @@ const router = createBrowserRouter([
       {
         path: "/scholarships",
         Component: AllScholarships,
-      },
-      {
-        path: "/success-stories",
-        Component: SuccessStories,
       },
       {
         path: "/wishlist",

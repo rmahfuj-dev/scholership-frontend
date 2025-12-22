@@ -20,69 +20,59 @@ const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
 
-  // func for sign up email & pass
   const signUpWithEmailPassFunc = (email, password) => {
     setAuthLoading(true);
     return createUserWithEmailAndPassword(auth, email, password);
   };
 
-  // func for sign in email & pass
   const signInWithEmailPassFunc = (email, password) => {
     setAuthLoading(true);
     return signInWithEmailAndPassword(auth, email, password);
   };
 
-  // func for update profile
   const updateProfileFunc = (displayName, photoURL) => {
     return updateProfile(auth.currentUser, { displayName, photoURL });
   };
 
-  // func for google sign in
   const googleSignInFunc = () => {
+    setAuthLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
 
-  // reset pass email
   const resetPassEmailFunc = (email) => {
     setAuthLoading(true);
     return sendPasswordResetEmail(auth, email);
   };
 
-  // sign out func
-  const signOutFunc = () => {
-    return signOut(auth);
+  const signOutFunc = async () => {
+    setAuthLoading(true);
+    try {
+      await axiosInstance.post("/logout"); // Clear cookie on server
+      return signOut(auth);
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setAuthLoading(false);
+    }
   };
 
-  // observer for user login or not
+  // Observer for user persistence (Page Reloads)
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
+    const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
       setUser(currentUser);
       if (currentUser) {
+        // If page is refreshed, ensure token exists
         const userInfo = { email: currentUser.email };
-        axiosInstance
-          .post("/getToken", userInfo)
-          .then(() => {
-            console.log("Login Succesfully");
-          })
-          .catch((err) => {
-            console.log("Error to generate token", err);
-          })
-          .finally(() => {
-            setAuthLoading(false);
-          });
+        try {
+          await axiosInstance.post("/getToken", userInfo);
+        } catch (error) {
+          console.error("Token refresh failed", error);
+        }
       } else {
-        axiosInstance
-          .post("/logout")
-          .then(() => {
-            console.log("token cleared");
-          })
-          .catch((err) => {
-            console.log(err);
-          })
-          .finally(() => {
-            setAuthLoading(false);
-          });
+        // If no user, ensure cookie is cleared
+        await axiosInstance.post("/logout");
       }
+      setAuthLoading(false);
     });
 
     return () => unsubscribe();

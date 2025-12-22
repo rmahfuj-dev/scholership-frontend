@@ -35,17 +35,24 @@ const SignUp = () => {
     const { image, email, password, name } = data;
 
     try {
-      const { user } = await signUpWithEmailPassFunc(email, password);
-      setUser(user);
+      // 1. Create User
+      const result = await signUpWithEmailPassFunc(email, password);
+
+      // 2. Update Profile
       await updateProfileFunc(name, image);
+
+      // 3. Save to DB
       const userInfo = { email, photoURL: image, displayName: name };
-      const { data } = await axiosInstance.post("/users", userInfo);
-      if (data.insertedId) {
-        navigate(state || "/");
-      }
+      await axiosInstance.post("/users", userInfo);
+
+      // 4. CRITICAL FIX: Manually get Token and WAIT
+      await axiosInstance.post("/getToken", { email: result.user.email });
+
+      // 5. Update User and Navigate
+      setUser(result.user);
+      navigate(state || "/");
     } catch (error) {
       toast.error(error.message);
-    } finally {
       setAuthLoading(false);
     }
   };
@@ -53,21 +60,26 @@ const SignUp = () => {
   const handleGoogleSignIn = async () => {
     setAuthLoading(true);
     try {
-      const { user } = await googleSignInFunc();
-      setUser(user);
+      // 1. Google Login
+      const result = await googleSignInFunc();
+      const user = result.user;
+
+      // 2. Save to DB
       const userInfo = {
         email: user.email,
         photoURL: user.photoURL,
         displayName: user.displayName,
       };
-      const { data } = await axiosInstance.post("/users", userInfo);
+      await axiosInstance.post("/users", userInfo);
 
-      if (data.insertedId || data.message === "user already exits") {
-        navigate(state || "/");
-      }
+      // 3. CRITICAL FIX: Manually get Token and WAIT
+      await axiosInstance.post("/getToken", { email: user.email });
+
+      // 4. Update User and Navigate
+      setUser(user);
+      navigate(state || "/");
     } catch (error) {
       toast.error(error.message);
-    } finally {
       setAuthLoading(false);
     }
   };

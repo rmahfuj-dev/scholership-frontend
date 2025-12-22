@@ -26,11 +26,6 @@ const publicLinks = [
     link: "/scholarships",
     icon: GraduationCap,
   },
-  {
-    label: "Success Stories",
-    link: "/success-stories",
-    icon: Trophy,
-  },
 ];
 
 const Navbar = () => {

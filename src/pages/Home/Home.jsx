@@ -1,8 +1,8 @@
 import { motion } from "framer-motion";
 import Banner from "./Banner/Banner";
-import Contact from "./Contact/Contact";
 import FAQ from "./FAQ/FAQ";
 import TopScholarship from "./TopScholarship/TopScholarship";
+import Success from "./Success/Success";
 
 const Home = () => {
   // 1. Define the animation behavior
@@ -44,7 +44,7 @@ const Home = () => {
         viewport={{ once: true, amount: 0.2 }}
         className="my-12"
       >
-        <Contact />
+       <Success />
       </motion.div>
 
       {/* FAQ Section */}

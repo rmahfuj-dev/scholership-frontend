@@ -15,7 +15,13 @@ const AllScholarships = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
   const axiosInstance = useAxios();
-  const { data: scholarships, isLoading } = useQuery({
+
+  // FIX 1: Add default value " = [] " and grab isError
+  const {
+    data: scholarships = [],
+    isLoading,
+    isError,
+  } = useQuery({
     queryKey: ["scholarships", schCat, subCat, loc, search, sort],
     queryFn: async () => {
       const { data } = await axiosInstance.get(
@@ -34,6 +40,18 @@ const AllScholarships = () => {
   };
 
   const hasActiveFilter = search || schCat || subCat || loc || sort;
+
+  // FIX 2: Handle API Errors gracefully
+  if (isError) {
+    return (
+      <Container className="py-20 text-center">
+        <h2 className="text-2xl font-bold text-red-500">
+          Something went wrong loading scholarships.
+        </h2>
+        <p>Please check your connection or try again later.</p>
+      </Container>
+    );
+  }
 
   return (
     <Container className={"py-20"}>
@@ -89,13 +107,21 @@ const AllScholarships = () => {
           ? [...Array(6)].map((_, index) => (
               <ScholarshipCardSkeleton key={index} />
             ))
-          : scholarships.map((scholarship) => (
+          : // FIX 3: Use Optional Chaining (?.) just in case
+            scholarships?.map((scholarship) => (
               <ScholarshipCard
                 key={scholarship._id}
                 scholarship={scholarship}
               />
             ))}
       </div>
+
+      {/* FIX 4: Add a message if no data found */}
+      {!isLoading && scholarships?.length === 0 && (
+        <div className="text-center w-full col-span-3 py-10">
+          <h3 className="text-xl font-semibold">No scholarships found.</h3>
+        </div>
+      )}
     </Container>
   );
 };

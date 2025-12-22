@@ -11,9 +11,9 @@ body {
   default: true; /* set as default */
   color-scheme: light; /* color of browser-provided UI */
 
-  --color-primary: #3b82f6;
+  /* --color-primary: #3b82f6; */
   --color-primary-content: #fff;
-  --color-secondary: #10b981;
+  --color-secondary: #3b82f6;
   /* --color-secondary-content: oklch(98% 0.01 200); */
   --color-accent: #0f172a;
   --color-accent-content: #d1d5db;

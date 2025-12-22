@@ -1,29 +1,37 @@
 import { Link } from "react-router";
-import BannerImg from "../../../assets/banner-bg.jpg";
 
 const Banner = () => {
   return (
     <div
-      className="hero min-h-[calc(80vh)]"
+      className="hero min-h-[calc(80vh)] place-items-stretch"
       style={{
         backgroundImage:
-          "url(https://images.unsplash.com/20/cambridge.JPG?fm=jpg&q=60&w=3000&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8dW5pdmVyc2l0eXxlbnwwfHwwfHx8MA%3D%3D)",
+          "url(https://images.unsplash.com/photo-1569447891824-7a1758aa73a2?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D)",
+        backgroundPosition: "center",
+        backgroundSize: "cover",
       }}
     >
-      <div className="hero-overlay"></div>
-      <div className="hero-content text-neutral-content text-center">
-        <div className="max-w-3xl">
-          <h1 className="mb-5 text-5xl font-bold leading-14">
-            Find the Right Scholarship. <br /> Apply with Confidence.
+      {/* Gradient Overlay: Dark on left, transparent on right */}
+      <div className="hero-overlay bg-gradient-to-r from-black/90 via-black/60 to-transparent"></div>
+
+      <div className="hero-content text-neutral-content w-full justify-start px-8 md:px-16">
+        <div className="max-w-2xl text-left">
+          <h1 className="mb-6 text-5xl md:text-6xl font-extrabold leading-tight">
+            Find the Right Scholarship. <br />
+            <span className="text-primary">Apply with Confidence.</span>
           </h1>
-          <p className="mb-5 text-lg text-accent-content">
-            Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-            excepturi exercitationem quasi. In deleniti eaque aut repudiandae et
-            a id nisi.
+          <p className="mb-8 text-lg text-gray-200 md:text-xl leading-relaxed">
+            Explore verified scholarships from top universities worldwide.
+            Compare eligibility, deadlines, and benefits — all in one place.
           </p>
-          <Link to={"/scholarships"} className="btn btn-primary">
-            All Scholarships
-          </Link>
+          <div className="flex gap-4">
+            <Link
+              to={"/scholarships"}
+              className="btn btn-primary btn-lg rounded-full px-8 shadow-lg hover:scale-105 transition-transform"
+            >
+              All Scholarships
+            </Link>
+          </div>
         </div>
       </div>
     </div>
