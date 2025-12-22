@@ -112,7 +112,7 @@ const ApplyScholarship = () => {
         <div className="card bg-base-100 shadow border border-base-200">
           <div className="card-body">
             <h3 className="card-title text-sm text-gray-500 uppercase mb-4">
-              Applying For
+              {/* Applying For */}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex flex-col gap-1 w-full">
