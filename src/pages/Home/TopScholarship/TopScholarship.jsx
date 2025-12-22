@@ -22,7 +22,7 @@ const TopScholarship = () => {
         </h2>
         <p className="text-gray-500 max-w-2xl mx-auto">
           Discover the best scholarship opportunities from top universities
-          {/* around the world. Start your journey to academic excellence today. */}
+          around the world. Start your journey to academic excellence today.
         </p>
       </div>
 
