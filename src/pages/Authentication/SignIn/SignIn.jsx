@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Container from "../../../components/Container/Container";
 import { Link, useLocation, useNavigate } from "react-router";
@@ -14,6 +14,7 @@ const SignIn = () => {
   const axiosInstance = useAxios();
   const [showPassword, setShowPassword] = useState(false);
   const {
+    user,
     setAuthLoading,
     authLoading,
     signInWithEmailPassFunc,
@@ -29,45 +30,41 @@ const SignIn = () => {
     reset,
   } = useForm();
 
+  useEffect(() => {
+    if (user && !authLoading) {
+      navigate("/");
+    }
+  }, [user, authLoading, navigate]);
+
+  if (user) return null;
+
   const onSubmit = async (data) => {
     setAuthLoading(true);
     const { email, password } = data;
     try {
-      // 1. Firebase Login
       const result = await signInWithEmailPassFunc(email, password);
-
-      // 2. CRITICAL FIX: Manually get Token and WAIT
       await axiosInstance.post("/getToken", { email: result.user.email });
-
-      // 3. Update User and Redirect
       setUser(result.user);
       reset();
       navigate(state || "/");
     } catch (error) {
       toast.error(error.message);
-      setAuthLoading(false); // Only stop loading if error
+      setAuthLoading(false);
     }
   };
 
   const handleGoogleSignIn = async () => {
     setAuthLoading(true);
     try {
-      // 1. Firebase Login
       const result = await googleSignInFunc();
       const user = result.user;
-
-      // 2. Save User to DB
       const userInfo = {
         email: user.email,
         photoURL: user.photoURL,
         displayName: user.displayName,
       };
       await axiosInstance.post("/users", userInfo);
-
-      // 3. CRITICAL FIX: Manually get Token and WAIT
       await axiosInstance.post("/getToken", { email: user.email });
-
-      // 4. Update User and Redirect
       setUser(user);
       navigate(state || "/");
     } catch (error) {
@@ -85,7 +82,6 @@ const SignIn = () => {
       <div className="card bg-base-100 w-full max-w-4xl shrink-0 shadow-2xl">
         <div className="card-body">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
-            {/* Lottie Animation Section - Desktop */}
             <div className="hidden lg:flex justify-center items-center order-2 lg:order-1">
               <Lottie
                 animationData={signinAnimation}
@@ -95,7 +91,6 @@ const SignIn = () => {
               />
             </div>
 
-            {/* Form Section */}
             <div className="order-1 lg:order-2">
               <form onSubmit={handleSubmit(onSubmit)}>
                 <h3 className="text-center text-2xl font-semibold mb-2">
@@ -105,7 +100,6 @@ const SignIn = () => {
                   Sign in to continue to your account
                 </p>
 
-                {/* Mobile Lottie - Shows only on small screens */}
                 <div className="lg:hidden flex justify-center mb-4">
                   <Lottie
                     animationData={signinAnimation}
@@ -116,7 +110,6 @@ const SignIn = () => {
                 </div>
 
                 <fieldset className="fieldset space-y-3">
-                  {/* Email Field */}
                   <div>
                     <label className="custom-label">
                       Email <span className="text-error">*</span>
@@ -142,7 +135,6 @@ const SignIn = () => {
                     )}
                   </div>
 
-                  {/* Password Field with Toggle */}
                   <div>
                     <label className="custom-label">
                       Password <span className="text-error">*</span>
@@ -181,7 +173,6 @@ const SignIn = () => {
                     )}
                   </div>
 
-                  {/* Remember Me & Forgot Password */}
                   <div className="flex items-center justify-between">
                     <label className="flex items-center gap-2 cursor-pointer">
                       <input
@@ -199,7 +190,6 @@ const SignIn = () => {
                     </Link>
                   </div>
 
-                  {/* Submit Button */}
                   <button type="submit" className="btn btn-primary mt-2 w-full">
                     {authLoading ? (
                       <>
@@ -213,17 +203,14 @@ const SignIn = () => {
                 </fieldset>
               </form>
 
-              {/* Divider */}
               <div className="divider my-4">OR</div>
 
-              {/* Social Login */}
               <div className="space-y-3">
                 <SocialBtn onClick={handleGoogleSignIn}>
                   Sign in with Google
                 </SocialBtn>
               </div>
 
-              {/* Sign Up Link */}
               <p className="text-center mt-4">
                 Don't have an account?{" "}
                 <Link

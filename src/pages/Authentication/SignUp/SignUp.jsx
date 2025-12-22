@@ -7,7 +7,7 @@ import signupAnimation from "../../../assets/animations/Login.json";
 import useAuth from "../../../hooks/useAuth";
 import toast from "react-hot-toast";
 import useAxios from "../../../hooks/useAxios";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
@@ -15,6 +15,7 @@ const SignUp = () => {
 
   const axiosInstance = useAxios();
   const {
+    user,
     signUpWithEmailPassFunc,
     authLoading,
     setAuthLoading,
@@ -29,6 +30,14 @@ const SignUp = () => {
     register,
     formState: { errors },
   } = useForm();
+
+  useEffect(() => {
+    if (user && !authLoading) {
+      navigate("/");
+    }
+  }, [user, authLoading, navigate]);
+
+  if (user) return null;
 
   const onSubmit = async (data) => {
     setAuthLoading(true);
