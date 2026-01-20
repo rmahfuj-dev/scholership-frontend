@@ -3,11 +3,13 @@ import Banner from "./Banner/Banner";
 import FAQ from "./FAQ/FAQ";
 import TopScholarship from "./TopScholarship/TopScholarship";
 import Success from "./Success/Success";
+import NewsLetter from "./NewsLetter/NewsLetter";
+import ScholarshipCategories from "./ScholarshipCategories/ScholarshipCategories";
+import HowItWorks from "./HowItWorks/HowItWorks";
+import WhyChooseUs from "./WhyChooseUs/WhyChooseUs";
 
 const Home = () => {
   // 1. Define the animation behavior
-  // "hidden": Initial state (invisible, slightly down)
-  // "visible": Final state (fully visible, normal position)
   const fadeInUp = {
     hidden: { opacity: 0, y: 50 },
     visible: {
@@ -18,25 +20,13 @@ const Home = () => {
   };
 
   return (
-    // 'overflow-x-hidden' prevents horizontal scrollbars during animation
     <section className="overflow-hidden">
-      {/* Banner: Animates immediately on page load */}
+      {/* Banner */}
       <motion.div variants={fadeInUp} initial="hidden" animate="visible">
         <Banner />
       </motion.div>
 
-      {/* Top Scholarship: Animates when user scrolls to it */}
-      <motion.div
-        variants={fadeInUp}
-        initial="hidden"
-        whileInView="visible"
-        viewport={{ once: true, amount: 0.2 }} // 'once: true' means it won't animate again when scrolling up
-        className="my-12" // Add spacing between sections
-      >
-        <TopScholarship />
-      </motion.div>
-
-      {/* Contact Section */}
+      {/* Top Scholarship */}
       <motion.div
         variants={fadeInUp}
         initial="hidden"
@@ -44,7 +34,51 @@ const Home = () => {
         viewport={{ once: true, amount: 0.2 }}
         className="my-12"
       >
-       <Success />
+        <TopScholarship />
+      </motion.div>
+
+      {/* Scholarship Categories */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="my-12"
+      >
+        <ScholarshipCategories />
+      </motion.div>
+
+      {/* How It Works */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="my-12"
+      >
+        <HowItWorks />
+      </motion.div>
+
+      {/* Why Choose Us */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="my-12"
+      >
+        <WhyChooseUs />
+      </motion.div>
+
+      {/* Success / Contact Section */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="my-12"
+      >
+        <Success />
       </motion.div>
 
       {/* FAQ Section */}
@@ -56,6 +90,17 @@ const Home = () => {
         className="my-12"
       >
         <FAQ />
+      </motion.div>
+
+      {/* Newsletter Section */}
+      <motion.div
+        variants={fadeInUp}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, amount: 0.2 }}
+        className="my-12"
+      >
+        <NewsLetter />
       </motion.div>
     </section>
   );

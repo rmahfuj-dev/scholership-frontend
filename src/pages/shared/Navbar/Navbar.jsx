@@ -7,14 +7,17 @@ import {
   Home,
   LayoutDashboard,
   LogOut,
-  Trophy,
   UserCog,
+  Sun,
+  Moon,
 } from "lucide-react";
 import ProfileNav from "../../../components/ProfileNav/ProfileNav";
 import MyLink from "../../../components/MyLink/MyLink";
 import toast from "react-hot-toast";
 import profileLoading from "../../../assets/animations/profileLoading.json";
 import Lottie from "lottie-react";
+import { useState, useEffect } from "react";
+
 const publicLinks = [
   {
     label: "Home",
@@ -36,11 +39,37 @@ const Navbar = () => {
     toast.success("Sign out Successfully!");
   };
 
+  // DaisyUI Theme toggle logic
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    // Check localStorage first
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+      setTheme(savedTheme);
+      document.documentElement.setAttribute("data-theme", savedTheme);
+    } else {
+      // Detect system theme on first visit
+      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const initialTheme = prefersDark ? "dark" : "light";
+      setTheme(initialTheme);
+      document.documentElement.setAttribute("data-theme", initialTheme);
+      localStorage.setItem("theme", initialTheme);
+    }
+  }, []);
+
+  const toggleTheme = () => {
+    const newTheme = theme === "light" ? "dark" : "light";
+    setTheme(newTheme);
+    document.documentElement.setAttribute("data-theme", newTheme);
+    localStorage.setItem("theme", newTheme);
+  };
+
   const userLinks = (
     <>
       <li>
         <Link
-          className={"mb-2.5 bg-base-100 text-[#000000]"}
+          className={"mb-2.5 bg-base-100 text-content"}
           to={"/dashboard/me"}
         >
           <UserCog size={18} />
@@ -48,7 +77,7 @@ const Navbar = () => {
         </Link>
       </li>
       <li>
-        <Link className={"mb-2.5 bg-base-100 text-[#000000]"} to={"/dashboard"}>
+        <Link className={"mb-2.5 bg-base-100 text-content"} to={"/dashboard"}>
           <LayoutDashboard size={18} />
           Dashboard
         </Link>
@@ -62,8 +91,18 @@ const Navbar = () => {
           Log out
         </button>
       </li>
+      <li>
+        <button
+          onClick={toggleTheme}
+          className="flex items-center gap-2 mb-2.5 bg-base-100"
+        >
+          {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          {theme === "light" ? "Dark Mode" : "Light Mode"}
+        </button>
+      </li>
     </>
   );
+
   return (
     <nav className="bg-base-100 shadow-sm py-1 sticky top-0 z-20">
       <Container className="navbar">
@@ -144,6 +183,16 @@ const Navbar = () => {
                   <MyLink link={link} />
                 </li>
               ))}
+              {/* Theme toggle inside hamburger menu */}
+              <li>
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center gap-2 mb-2.5 bg-base-100 w-full justify-start"
+                >
+                  {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+                  {theme === "light" ? "Dark Mode" : "Light Mode"}
+                </button>
+              </li>
             </ul>
           </div>
           <div className="hidden lg:flex gap-4">
@@ -163,6 +212,13 @@ const Navbar = () => {
                 <Link to={"/signUp"} className="btn btn-primary">
                   Sign Up
                 </Link>
+                {/* Theme toggle for large screens */}
+                <button
+                  onClick={toggleTheme}
+                  className="flex items-center gap-2 btn-ghost"
+                >
+                  {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+                </button>
               </>
             )}
           </div>
